@@ -1,1 +1,19 @@
+// Step 1 — I started by finding the victim's hostname
+Employees
+| where name == "James Douglas"
 
+// Step 2 — Then I located the malicious game file on his machine
+FileCreationEvents
+| where hostname == "UB9I-DESKTOP"
+| where filename has "DeTankWar"
+
+// Step 3 — I searched for the phishing emails that delivered the game link
+Email
+| where link has "detankwar.com"
+
+// Step 4 — Finally, I mapped the recipients to their job roles to understand the precision targeting
+Email
+| where link has "DeTankWar"
+| distinct recipient
+| join kind=inner Employees on $left.recipient == $right.email_addr
+| distinct email_addr, name, role
