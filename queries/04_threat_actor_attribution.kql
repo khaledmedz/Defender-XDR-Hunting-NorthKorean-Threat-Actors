@@ -1,1 +1,18 @@
 
+// Step 1 — I started by finding the malicious game file and its hash
+FileCreationEvents
+| where hostname == "UB9I-DESKTOP"
+| where filename has "DeTankWar"
+| distinct sha256
+
+// Step 2 — Then I checked how many machines were affected by the malicious DLLs
+FileCreationEvents
+| where filename in~ ("nvunityplugin.dll", "unityplayer.dll")
+| project timestamp, hostname, filename, sha256
+| order by timestamp asc
+
+// Step 3 — Finally, I confirmed the command and control (C2) communication
+ProcessEvents
+| where process_commandline has "curl"
+| where process_commandline has_any ("mingeloem.com", "matrixane.com")
+| project timestamp, hostname, process_commandline
