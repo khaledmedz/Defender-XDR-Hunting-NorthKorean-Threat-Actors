@@ -61,7 +61,7 @@ TitanShield is a defense contractor running a classified program called **Projec
 ![Moonstone Sleet Threat Intelligence](Screenshots/01_moonstone_sleet_ti_attribution.png)
 
 **2. FTP Exfiltration Command – The Smoking Gun**  
-![FTP Exfiltration Command](Screenshots/02_ftp_exfiltration_command.png)
+![FTP Exfiltration Command](Screenshots/02_ftp_exfiltration_command.png) 
 
 **3. Lateral Movement Across 15 Hosts**  
 ![15 Hosts Compromised](Screenshots/03_15_hosts_compromised.png)
