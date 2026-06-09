@@ -49,6 +49,7 @@ TitanShield is a defense contractor running a classified program called **Projec
 - Vector: Fake tank game distributed via phishing
 - Attribution confirmed via Defender XDR Threat Intelligence
 
+
 **Crimson Sandstorm (Curium)**  
 - Used phishing emails from `marcella_flores[.]gmail[.]com`
 - Infrastructure: IPs `208.199.30.154` and `202.241.233.180`
@@ -56,6 +57,9 @@ TitanShield is a defense contractor running a classified program called **Projec
 - Attribution confirmed via Passive DNS + Defender Threat Intelligence
 
   ## Investigation Walkthrough
+
+**00. Moonstone Sleet Actor Profile**  
+![Moonstone Sleet Actor Profile](Screenshots/Moonstone_actor_profile.png)
 
 **1. Moonstone Sleet Threat Intelligence Attribution**  
 ![Moonstone Sleet Threat Intelligence](Screenshots/01_moonstone_sleet_ti_attribution.png)
@@ -81,9 +85,6 @@ TitanShield is a defense contractor running a classified program called **Projec
 **8. C2 Domains Used by the Actor**  
 ![C2 Domains](Screenshots/C2_domains.png)
 
-**9. Moonstone Sleet Actor Profile**  
-![Moonstone Sleet Actor Profile](Screenshots/Moonstone_actor_profile.png)
-
 ---
 
 ## Skills Demonstrated
@@ -98,5 +99,5 @@ TitanShield is a defense contractor running a classified program called **Projec
 
 ---
 
-**Author**: [Your Full Name]  
-**Date**: April 2026
+**Author**: Mohamed Khaled 
+**Date**: Feb 2026
