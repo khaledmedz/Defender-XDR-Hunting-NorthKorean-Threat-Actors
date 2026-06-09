@@ -1,1 +1,36 @@
 
+// Step 1 — First I found Taylor's hostname from his username
+Employees
+| where username == "chtaylor"
+| distinct hostname
+
+// Step 2 — Then I looked for the "whoami" command he ran on his machine
+ProcessEvents
+| where hostname == "IL5M-DESKTOP"
+| where process_commandline has "whoami"
+
+// Step 3 — I searched for the recon commands he used to dump data
+ProcessEvents
+| where hostname == "IL5M-DESKTOP"
+| where process_commandline has_all("echo", ">>", "logs.txt")
+
+// Step 4 — I wanted to see how many machines were affected in the company
+ProcessEvents
+| where process_commandline has_all("echo", ">>", "logs.txt")
+| distinct hostname
+
+// Step 5 — I checked which job roles were impacted
+let target_hosts =
+ProcessEvents
+| where process_commandline has_all("echo", ">>", "logs.txt")
+| distinct hostname;
+
+Employees
+| where hostname in (target_hosts)
+| distinct role
+
+// Step 6 — Finally, I reconstructed the attack timeline to see what happened before the recon
+ProcessEvents
+| where timestamp <= datetime(2024-07-17T10:47:43Z)
+| where hostname == "IL5M-DESKTOP"
+| order by timestamp desc
