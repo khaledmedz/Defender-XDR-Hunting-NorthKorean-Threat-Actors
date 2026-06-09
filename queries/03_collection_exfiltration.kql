@@ -1,1 +1,27 @@
 
+// Step 1 — I started by extracting all suspicious domains from the attacker’s email campaign
+Email
+| where sender == "marcella_flores@gmail.com"
+| extend domain = parse_url(link).Host
+| distinct tostring(domain)
+
+// Step 2 — Then I pivoted those domains to their real IP addresses using Passive DNS
+let bad_domains =
+    Email
+    | where sender == "marcella_flores@gmail.com"
+    | extend domain = parse_url(link).Host
+    | distinct tostring(domain);
+
+PassiveDns
+| where domain in (bad_domains)
+| distinct ip
+
+// Step 3 — I looked for those attacker IPs in our inbound network traffic (pre-attack reconnaissance)
+InboundNetworkEvents
+| where src_ip in ("208.199.30.154", "202.241.233.180")
+| count
+
+// Step 4 — Finally, I confirmed when the reconnaissance started
+InboundNetworkEvents
+| where src_ip in ("208.199.30.154", "202.241.233.180")
+| order by timestamp asc
