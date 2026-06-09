@@ -1,36 +1,21 @@
+// Step 1 — I started by looking for the suspicious DLLs dropped during the tank game
+FileCreationEvents
+| where filename in~ ("nvunityplugin.dll", "unityplayer.dll")
+| distinct sha256
 
-// Step 1 — First I found Taylor's hostname from his username
-Employees
-| where username == "chtaylor"
-| distinct hostname
-
-// Step 2 — Then I looked for the "whoami" command he ran on his machine
+// Step 2 — This was the smoking gun: I found the FTP exfiltration command
 ProcessEvents
-| where hostname == "IL5M-DESKTOP"
-| where process_commandline has "whoami"
+| where process_commandline has "curl"
+| where process_commandline has_any ("mingeloem.com", "matrixane.com")
 
-// Step 3 — I searched for the recon commands he used to dump data
+// Step 3 — I checked what was inside the zip file they were trying to steal
 ProcessEvents
-| where hostname == "IL5M-DESKTOP"
-| where process_commandline has_all("echo", ">>", "logs.txt")
+| where process_commandline has "TopSecret.zip"
 
-// Step 4 — I wanted to see how many machines were affected in the company
+// Step 4 — I traced where the data originally came from
 ProcessEvents
-| where process_commandline has_all("echo", ">>", "logs.txt")
-| distinct hostname
+| where process_commandline has "StagingArea"
 
-// Step 5 — I checked which job roles were impacted
-let target_hosts =
-ProcessEvents
-| where process_commandline has_all("echo", ">>", "logs.txt")
-| distinct hostname;
-
-Employees
-| where hostname in (target_hosts)
-| distinct role
-
-// Step 6 — Finally, I reconstructed the attack timeline to see what happened before the recon
-ProcessEvents
-| where timestamp <= datetime(2024-07-17T10:47:43Z)
-| where hostname == "IL5M-DESKTOP"
-| order by timestamp desc
+// Step 5 — Finally, I identified which employee was the source of the exfiltration
+Email
+| where subject contains "logs.zip"
